@@ -1,1 +1,10 @@
-
+.env
+config.py
+ai_logs.json
+users.json
+requests.json
+*.log
+.venv/
+venv/
+__pycache__/
+*.pyc
