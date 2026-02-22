@@ -7,7 +7,21 @@
   <meta name="description" content="AdsPay BY — оплата ChatGPT, Claude, Midjourney и других ИИ-сервисов. Без блокировок, от 5% комиссии." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..900&display=swap" as="style" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..900&display=swap" rel="stylesheet" />
+  <!-- Open Graph -->
+  <meta property="og:title" content="Оплата ChatGPT и ИИ-сервисов | AdsPay BY" />
+  <meta property="og:description" content="Оплачивайте ChatGPT, Claude, Midjourney и 30+ ИИ-сервисов без блокировок из Беларуси. Комиссия от 5%." />
+  <meta property="og:image" content="https://adspay.by/og-image.jpg" />
+  <meta property="og:url" content="https://adspay.by/ai-services.html" />
+  <meta property="og:type" content="website" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Оплата ChatGPT и ИИ-сервисов | AdsPay BY" />
+  <meta name="twitter:description" content="Оплачивайте ChatGPT, Claude, Midjourney и 30+ ИИ-сервисов без блокировок. Комиссия от 5%." />
+  <meta name="twitter:image" content="https://adspay.by/og-image.jpg" />
+  <meta name="theme-color" content="#3B82F6" />
+  <link rel="canonical" href="https://adspay.by/ai-services.html" />
   <style>
     :root {
       --primary: #3B82F6;
@@ -31,6 +45,16 @@
       --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
       --shadow-lg: 0 20px 60px rgba(0,0,0,0.3);
       --shadow-glow: 0 0 80px rgba(59,130,246,0.4);
+      /* Fluid typography */
+      --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+      --text-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+      --text-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+      --text-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+      --text-3xl: clamp(1.875rem, 1.5rem + 1.875vw, 2.5rem);
+      --text-4xl: clamp(2.25rem, 1.8rem + 2.25vw, 3rem);
+      --text-5xl: clamp(3rem, 2.4rem + 3vw, 4rem);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -47,9 +71,9 @@
     ::-webkit-scrollbar-track { background: var(--bg-darker); }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-    h1 { font-size: 64px; font-weight: 900; letter-spacing: -0.04em; line-height: 1.1; }
-    h2 { font-size: 52px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.15; }
-    h3 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+    h1 { font-size: var(--text-5xl); font-weight: 900; letter-spacing: -0.04em; line-height: 1.1; }
+    h2 { font-size: var(--text-4xl); font-weight: 800; letter-spacing: -0.04em; line-height: 1.15; }
+    h3 { font-size: var(--text-xl); font-weight: 700; letter-spacing: -0.02em; }
     .gradient-text {
       background: linear-gradient(135deg, var(--primary-light), var(--accent-purple));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
@@ -105,22 +129,44 @@
 
     /* ── BUTTONS ── */
     .btn-primary {
+      position: relative; overflow: hidden;
       display: inline-flex; align-items: center; gap: 8px;
       background: linear-gradient(135deg, var(--primary), var(--accent-purple));
-      color: #fff; font-size: 16px; font-weight: 600;
+      color: #fff; font-size: var(--text-base); font-weight: 700;
       padding: 16px 32px; border-radius: 14px; border: none; cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute; top: 50%; left: 50%;
+      width: 0; height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
     }
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 48px rgba(59,130,246,0.6); }
+    .btn-primary:hover::before { width: 300px; height: 300px; }
     .btn-secondary {
       display: inline-flex; align-items: center; gap: 8px;
       background: rgba(59,130,246,0.12);
-      color: var(--primary-light); font-size: 16px; font-weight: 600;
+      color: var(--primary-light); font-size: var(--text-base); font-weight: 600;
       padding: 16px 32px; border-radius: 14px;
       border: 1px solid rgba(59,130,246,0.3); cursor: pointer;
       transition: background 0.2s, border-color 0.2s, transform 0.2s;
     }
     .btn-secondary:hover { background: rgba(59,130,246,0.2); border-color: var(--primary); transform: translateY(-2px); }
+
+    /* ── SVG ICONS ── */
+    .icon {
+      width: 48px; height: 48px;
+      color: #60A5FA;
+      filter: drop-shadow(0 4px 16px rgba(59, 130, 246, 0.3));
+      transition: all 0.3s;
+    }
+    .icon:hover { transform: scale(1.1) rotate(5deg); filter: drop-shadow(0 8px 24px rgba(59, 130, 246, 0.5)); }
+    .btn-icon { width: 16px; height: 16px; flex-shrink: 0; }
 
     /* ── GLASS CARD ── */
     .glass-card {
@@ -190,7 +236,7 @@
     /* ── AI SERVICES GRID ── */
     .ai-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
     .ai-card { padding: 32px 28px; }
-    .ai-card-icon { font-size: 36px; margin-bottom: 16px; display: block; }
+    .ai-card-icon { margin-bottom: 16px; display: block; }
     .ai-card h3 { margin-bottom: 14px; font-size: 19px; }
     .ai-service-item {
       display: flex; align-items: center; gap: 10px;
@@ -210,7 +256,7 @@
     .why-bg { background: var(--bg-darker); }
     .why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 880px; margin: 0 auto; }
     .why-card { padding: 36px 32px; }
-    .why-icon { font-size: 40px; margin-bottom: 16px; display: block; }
+    .why-icon { margin-bottom: 16px; display: block; }
     .why-card h3 { margin-bottom: 10px; font-size: 20px; }
     .why-card p { color: var(--text-muted); font-size: 15px; line-height: 1.7; }
 
@@ -252,13 +298,9 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
-      h1 { font-size: 52px; }
-      h2 { font-size: 40px; }
       .ai-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 768px) {
-      h1 { font-size: 36px; }
-      h2 { font-size: 32px; }
       section { padding: 72px 0; }
       .nav-links, .btn-nav { display: none; }
       .burger { display: flex; }
@@ -316,15 +358,15 @@
       <h1>Оплата ChatGPT и&nbsp;всех ИИ-сервисов <span class="gradient-text">без проблем</span></h1>
       <p>Карты AdsPay работают с ChatGPT, Claude, Midjourney и любыми другими ИИ-инструментами. Без блокировок из Беларуси.</p>
       <div class="hero-cta">
-        <a href="https://t.me/tvoy_rot_naoborot_rb" target="_blank" rel="noopener" class="btn-primary">💬 Написать менеджеру</a>
-        <a href="https://t.me/adspay_by_bot" target="_blank" rel="noopener" class="btn-secondary">🤖 Telegram-бот</a>
+        <a href="https://t.me/tvoy_rot_naoborot_rb" target="_blank" rel="noopener" class="btn-primary">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Написать менеджеру
+        </a>
+        <a href="https://t.me/adspay_by_bot" target="_blank" rel="noopener" class="btn-secondary">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8.01" y2="16"/><line x1="16" y1="16" x2="16.01" y2="16"/></svg>
+          Telegram-бот
+        </a>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     AI SERVICES GRID
 ══════════════════════════════════════════ -->
 <section>
   <div class="container">
@@ -336,7 +378,7 @@
     <div class="ai-grid">
 
       <div class="glass-card ai-card fade-in" style="transition-delay:0.05s">
-        <span class="ai-card-icon">💬</span>
+        <span class="ai-card-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
         <h3>Текстовые ИИ</h3>
         <div class="ai-service-item">ChatGPT Plus, Team, Enterprise</div>
         <div class="ai-service-item">Claude Pro, Claude Team</div>
@@ -347,7 +389,7 @@
       </div>
 
       <div class="glass-card ai-card fade-in" style="transition-delay:0.1s">
-        <span class="ai-card-icon">🎨</span>
+        <span class="ai-card-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></span>
         <h3>Генерация изображений</h3>
         <div class="ai-service-item">Midjourney</div>
         <div class="ai-service-item">DALL-E 3 (OpenAI)</div>
@@ -358,7 +400,7 @@
       </div>
 
       <div class="glass-card ai-card fade-in" style="transition-delay:0.15s">
-        <span class="ai-card-icon">🎥</span>
+        <span class="ai-card-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span>
         <h3>Видео и аудио</h3>
         <div class="ai-service-item">ElevenLabs (озвучка)</div>
         <div class="ai-service-item">Synthesia (видео)</div>
@@ -369,7 +411,7 @@
       </div>
 
       <div class="glass-card ai-card fade-in" style="transition-delay:0.2s">
-        <span class="ai-card-icon">💼</span>
+        <span class="ai-card-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12.01" y2="12"/></svg></span>
         <h3>Бизнес и продуктивность</h3>
         <div class="ai-service-item">Notion AI</div>
         <div class="ai-service-item">Grammarly Premium</div>
@@ -380,7 +422,7 @@
       </div>
 
       <div class="glass-card ai-card fade-in" style="transition-delay:0.25s">
-        <span class="ai-card-icon">💻</span>
+        <span class="ai-card-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
         <h3>Разработка и код</h3>
         <div class="ai-service-item">GitHub Copilot</div>
         <div class="ai-service-item">Codeium Pro</div>
@@ -391,7 +433,7 @@
       </div>
 
       <div class="glass-card ai-card fade-in" style="transition-delay:0.3s">
-        <span class="ai-card-icon">🔬</span>
+        <span class="ai-card-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
         <h3>Специализированные</h3>
         <div class="ai-service-item">Perplexity Pro</div>
         <div class="ai-service-item">Character.ai Plus</div>
@@ -417,22 +459,22 @@
     </div>
     <div class="why-grid">
       <div class="glass-card why-card fade-in" style="transition-delay:0.05s">
-        <span class="why-icon">🚫</span>
+        <span class="why-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></span>
         <h3>Без блокировок</h3>
         <p>Обычные карты белорусских банков регулярно блокируются при оплате ChatGPT и других ИИ-сервисов. Карты AdsPay работают стабильно без отказов.</p>
       </div>
       <div class="glass-card why-card fade-in" style="transition-delay:0.1s">
-        <span class="why-icon">🌍</span>
+        <span class="why-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
         <h3>Любые регионы</h3>
         <p>Оплачивайте сервисы, недоступные в Беларуси. Карты AdsPay позволяют подключать подписки из любой точки мира.</p>
       </div>
       <div class="glass-card why-card fade-in" style="transition-delay:0.15s">
-        <span class="why-icon">💰</span>
+        <span class="why-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
         <h3>Прозрачные комиссии</h3>
         <p>От 5% при больших объёмах. Без скрытых платежей и неожиданных списаний. Всегда знаете, сколько платите за сервис.</p>
       </div>
       <div class="glass-card why-card fade-in" style="transition-delay:0.2s">
-        <span class="why-icon">⚡</span>
+        <span class="why-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
         <h3>Быстрая активация</h3>
         <p>Получите реквизиты карты уже в день обращения. Минимум документов, максимум скорости. Платите за ИИ уже сегодня.</p>
       </div>
@@ -480,8 +522,14 @@
       <h2 style="margin-top:16px; margin-bottom:16px;">Готовы использовать ИИ без ограничений?</h2>
       <p>Напишите менеджеру — поможем разобраться и подберём нужный вариант</p>
       <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:40px;">
-        <a href="https://t.me/tvoy_rot_naoborot_rb" target="_blank" rel="noopener" class="btn-primary">💬 Написать менеджеру</a>
-        <a href="https://t.me/adspay_by_bot" target="_blank" rel="noopener" class="btn-secondary">🤖 Telegram-бот</a>
+        <a href="https://t.me/tvoy_rot_naoborot_rb" target="_blank" rel="noopener" class="btn-primary">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Написать менеджеру
+        </a>
+        <a href="https://t.me/adspay_by_bot" target="_blank" rel="noopener" class="btn-secondary">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8.01" y2="16"/><line x1="16" y1="16" x2="16.01" y2="16"/></svg>
+          Telegram-бот
+        </a>
       </div>
     </div>
   </div>
