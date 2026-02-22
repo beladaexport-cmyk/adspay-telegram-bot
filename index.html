@@ -1051,6 +1051,18 @@
   }
 
   // ── FORM SUBMIT ──
+  function buildApiPayload(formData, source) {
+    return {
+      name: formData.name,
+      telegram: formData.telegram,
+      platforms: formData.platforms.join(', '),
+      budget: formData.budget,
+      comment: formData.comment,
+      source,
+      timestamp: new Date().toISOString()
+    };
+  }
+
   async function submitPageForm(e) {
     e.preventDefault();
     const form = document.getElementById('mainForm');
@@ -1087,14 +1099,9 @@
       const response = await fetch('https://adspay-telegram.belada-export.workers.dev', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          platforms: platforms.join(', '),
-          source: 'website_form',
-          timestamp: new Date().toISOString()
-        })
+        body: JSON.stringify(buildApiPayload(formData, 'website_form'))
       });
-      if (!response.ok) throw new Error('Network response was not ok');
+      if (!response.ok) throw new Error(`Request failed: ${response.status} ${response.statusText}`);
       form.style.display = 'none';
       document.getElementById('formSuccess').style.display = 'block';
       if (window.gtag) gtag('event', 'form_submit', { form_name: 'main_application' });
@@ -1142,14 +1149,9 @@
       const response = await fetch('https://adspay-telegram.belada-export.workers.dev', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          platforms: platforms.join(', '),
-          source: 'modal_form',
-          timestamp: new Date().toISOString()
-        })
+        body: JSON.stringify(buildApiPayload(formData, 'modal_form'))
       });
-      if (!response.ok) throw new Error('Network response was not ok');
+      if (!response.ok) throw new Error(`Request failed: ${response.status} ${response.statusText}`);
       document.getElementById('modalForm').style.display = 'none';
       document.getElementById('modalSuccess').style.display = 'block';
       if (window.gtag) gtag('event', 'form_submit', { form_name: 'modal_application' });
