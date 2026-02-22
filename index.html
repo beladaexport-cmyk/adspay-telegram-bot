@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AdsPay — Реклама и ИИ-сервисы через Telegram</title>
+  <style>
+    :root {
+      --primary: #2196F3;
+      --primary-dark: #1976D2;
+      --primary-light: #4FC3F7;
+      --accent: #4CAF50;
+      --accent-gold: #FFD54F;
+      --accent-purple: #8B5CF6;
+      --bg-darker: #020a13;
+      --bg-dark: #0a1929;
+      --bg-card: #0d1b2a;
+      --bg-card-hover: #1a2332;
+      --border: #1e3a5f;
+      --border-light: #2e4a6f;
+      --text: #f9fafb;
+      --text-secondary: #d1d5db;
+      --text-muted: #9ca3af;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg-darker);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: rgba(10, 25, 41, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 24px;
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--primary-light);
+      text-decoration: none;
+    }
+
+    .logo span { color: var(--accent-gold); }
+
+    nav { display: flex; gap: 8px; align-items: center; }
+
+    nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    nav a:hover, nav a.active {
+      background: rgba(33, 150, 243, 0.15);
+      color: var(--primary-light);
+    }
+
+    nav a.nav-btn {
+      background: var(--primary);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    nav a.nav-btn:hover { background: var(--primary-dark); }
+
+    /* ===== HERO ===== */
+    .hero {
+      background: linear-gradient(135deg, var(--bg-darker) 0%, #0a1929 50%, #071520 100%);
+      padding: 100px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(33,150,243,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(33,150,243,0.15);
+      border: 1px solid rgba(33,150,243,0.3);
+      color: var(--primary-light);
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+      letter-spacing: 0.5px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 .highlight { color: var(--primary-light); }
+    .hero h1 .highlight-gold { color: var(--accent-gold); }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 620px;
+      margin: 0 auto 36px;
+    }
+
+    .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(33,150,243,0.4);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      box-shadow: 0 6px 24px rgba(33,150,243,0.5);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border-light);
+    }
+
+    .btn-outline:hover {
+      background: var(--bg-card);
+      border-color: var(--primary);
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(76,175,80,0.35);
+    }
+
+    .btn-accent:hover {
+      background: #388E3C;
+      box-shadow: 0 6px 24px rgba(76,175,80,0.45);
+    }
+
+    /* ===== SECTION ===== */
+    section { padding: 80px 24px; }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    .section-header { text-align: center; margin-bottom: 56px; }
+
+    .section-badge {
+      display: inline-block;
+      background: rgba(33,150,243,0.12);
+      border: 1px solid rgba(33,150,243,0.25);
+      color: var(--primary-light);
+      padding: 4px 14px;
+      border-radius: 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .section-header h2 {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .section-header p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ===== CARDS ===== */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    }
+
+    .card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-light);
+      transform: translateY(-3px);
+    }
+
+    .card-icon {
+      font-size: 2.2rem;
+      margin-bottom: 16px;
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* ===== PLATFORMS ===== */
+    .platforms-section { background: var(--bg-dark); }
+
+    /* ===== FORM SECTION ===== */
+    .form-section { background: var(--bg-darker); }
+
+    .form-wrapper {
+      max-width: 680px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px;
+    }
+
+    .form-group { margin-bottom: 20px; }
+
+    .form-group label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .form-group label .req { color: var(--primary-light); margin-left: 2px; }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(33,150,243,0.15);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 90px; }
+
+    .checkboxes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .checkbox-item:hover { border-color: var(--primary); background: var(--bg-card-hover); }
+
+    .checkbox-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .checkbox-item span { font-size: 0.9rem; color: var(--text-secondary); user-select: none; }
+
+    .form-submit {
+      width: 100%;
+      margin-top: 8px;
+      padding: 14px;
+      font-size: 1rem;
+      border-radius: 12px;
+    }
+
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 32px;
+    }
+
+    .form-success .success-icon { font-size: 3rem; margin-bottom: 16px; }
+
+    .form-success h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--accent);
+    }
+
+    .form-success p { color: var(--text-secondary); font-size: 0.95rem; }
+
+    /* ===== HOW IT WORKS ===== */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+    }
+
+    .step-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      text-align: center;
+    }
+
+    .step-number {
+      width: 48px;
+      height: 48px;
+      background: rgba(33,150,243,0.15);
+      border: 1px solid rgba(33,150,243,0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary-light);
+      margin: 0 auto 16px;
+    }
+
+    .step-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .step-card p { color: var(--text-secondary); font-size: 0.88rem; }
+
+    /* ===== CTA ===== */
+    .cta-section {
+      background: linear-gradient(135deg, var(--bg-dark), var(--bg-darker));
+      border-top: 1px solid var(--border);
+    }
+
+    .cta-inner {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .cta-inner h2 {
+      font-size: clamp(1.6rem, 3vw, 2rem);
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .cta-inner p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      margin-bottom: 32px;
+    }
+
+    .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--bg-darker);
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .footer-logo {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary-light);
+      text-decoration: none;
+    }
+
+    .footer-logo span { color: var(--accent-gold); }
+
+    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--primary-light); }
+
+    .footer-copy {
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      width: 100%;
+      text-align: center;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 640px) {
+      header { padding: 0 16px; }
+      nav a { padding: 6px 10px; font-size: 0.82rem; }
+      .hero { padding: 70px 16px 60px; }
+      section { padding: 60px 16px; }
+      .form-wrapper { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">Ads<span>Pay</span></a>
+    <nav>
+      <a href="index.html" class="active">Главная</a>
+      <a href="ai-services.html">ИИ-сервисы</a>
+      <a href="guide.html">Руководство</a>
+      <a href="https://t.me/adspay_by_bot" class="nav-btn" target="_blank" rel="noopener">🤖 Запустить бота</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">🚀 Реклама и ИИ-сервисы через Telegram</div>
+  <h1>
+    <span class="highlight">Запускайте рекламу</span><br>
+    и подключайте <span class="highlight-gold">ИИ-сервисы</span><br>
+    через один бот
+  </h1>
+  <p>
+    AdsPay — это Telegram-бот для пополнения рекламных кабинетов (Meta, Google, TikTok),
+    а также подписки на ChatGPT, Claude, Midjourney и другие ИИ-инструменты.
+    Быстро, удобно, без лишних посредников.
+  </p>
+  <div class="hero-actions">
+    <a href="https://t.me/adspay_by_bot" class="btn btn-primary" target="_blank" rel="noopener">
+      🤖 Открыть @adspay_by_bot
+    </a>
+    <a href="#request-form" class="btn btn-outline">📋 Оставить заявку</a>
+  </div>
+</section>
+
+<!-- PLATFORMS -->
+<section class="platforms-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-badge">Платформы</div>
+      <h2>Реклама и ИИ-инструменты в одном месте</h2>
+      <p>Пополняйте рекламные кабинеты и подключайте ИИ-сервисы без банковских ограничений</p>
+    </div>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">📘</div>
+        <h3>Meta (Facebook &amp; Instagram)</h3>
+        <p>Быстрое пополнение рекламного кабинета Meta Ads. Без отказов и задержек.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔍</div>
+        <h3>Google Ads</h3>
+        <p>Пополнение Google рекламного аккаунта для поиска, YouTube и контекстной сети.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎵</div>
+        <h3>TikTok Ads</h3>
+        <p>Финансирование рекламы на TikTok — охватите молодую аудиторию без ограничений.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🧠</div>
+        <h3>ИИ-сервисы</h3>
+        <p>ChatGPT Plus, Claude Pro, Midjourney и другие — подпишитесь через бота за минуты.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section style="background: var(--bg-dark);">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-badge">Как это работает</div>
+      <h2>Три простых шага</h2>
+      <p>От заявки до пополнения — быстро и прозрачно</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3>Оставьте заявку</h3>
+        <p>Напишите в бота @adspay_by_bot или заполните форму ниже с деталями вашей рекламы.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3>Получите счёт</h3>
+        <p>Менеджер рассчитает сумму с учётом курса и пришлёт реквизиты для оплаты.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3>Реклама запущена</h3>
+        <p>После оплаты кабинет пополняется в течение нескольких часов. Приступайте к продвижению.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <h3>Поддержка 24/7</h3>
+        <p>Менеджер на связи в Telegram: <a href="https://t.me/tvoy_rot_naoborot_rb" target="_blank" rel="noopener" style="color: var(--primary-light);">@tvoy_rot_naoborot_rb</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPLICATION FORM -->
+<section class="form-section" id="request-form">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-badge">Заявка</div>
+      <h2>Оставить заявку</h2>
+      <p>Заполните форму и наш менеджер свяжется с вами в ближайшее время</p>
+    </div>
+    <div class="form-wrapper">
+      <form id="pageForm" onsubmit="submitPageForm(event)">
+        <div class="form-group">
+          <label for="name">Имя <span class="req">*</span></label>
+          <input type="text" id="name" name="name" placeholder="Ваше имя" required />
+        </div>
+        <div class="form-group">
+          <label for="telegram">Telegram <span class="req">*</span></label>
+          <input type="text" id="telegram" name="telegram" placeholder="@username или +номер" required />
+        </div>
+        <div class="form-group">
+          <label>Платформы (выберите все нужные)</label>
+          <div class="checkboxes-grid">
+            <label class="checkbox-item">
+              <input type="checkbox" name="platforms" value="Meta (Facebook/Instagram)" />
+              <span>📘 Meta (Facebook/Instagram)</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="platforms" value="Google Ads" />
+              <span>🔍 Google Ads</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="platforms" value="TikTok Ads" />
+              <span>🎵 TikTok Ads</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="platforms" value="ИИ-сервисы (ChatGPT, Claude, Midjourney)" />
+              <span>🧠 ИИ-сервисы</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="platforms" value="Другое" />
+              <span>💡 Другое</span>
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="budget">Бюджет <span class="req">*</span></label>
+          <select id="budget" name="budget" required>
+            <option value="" disabled selected>Выберите диапазон бюджета</option>
+            <option value="до $500">до $500</option>
+            <option value="$500 – $2000">$500 – $2 000</option>
+            <option value="$2000 – $5000">$2 000 – $5 000</option>
+            <option value="$5000+">$5 000+</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="comment">Комментарий</label>
+          <textarea id="comment" name="comment" placeholder="Дополнительная информация о вашем проекте..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary form-submit">
+          📩 Отправить заявку
+        </button>
+      </form>
+      <div class="form-success" id="formSuccess">
+        <div class="success-icon">✅</div>
+        <h3>Заявка отправлена!</h3>
+        <p>Наш менеджер свяжется с вами в ближайшее время через Telegram.<br>
+           Или напишите напрямую: <a href="https://t.me/tvoy_rot_naoborot_rb" target="_blank" rel="noopener" style="color: var(--primary-light);">@tvoy_rot_naoborot_rb</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-inner">
+      <h2>🚀 Готовы начать?</h2>
+      <p>
+        Запустите рекламу или подключите ИИ-сервисы прямо сейчас через Telegram-бота
+        <strong>@adspay_by_bot</strong> — это быстро и просто.
+      </p>
+      <div class="cta-actions">
+        <a href="https://t.me/adspay_by_bot" class="btn btn-primary" target="_blank" rel="noopener">
+          🤖 Открыть бота
+        </a>
+        <a href="https://t.me/tvoy_rot_naoborot_rb" class="btn btn-accent" target="_blank" rel="noopener">
+          💬 Написать менеджеру
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="footer-logo">Ads<span>Pay</span></a>
+    <div class="footer-links">
+      <a href="index.html">Главная</a>
+      <a href="ai-services.html">ИИ-сервисы</a>
+      <a href="guide.html">Руководство</a>
+      <a href="https://t.me/adspay_by_bot" target="_blank" rel="noopener">Бот @adspay_by_bot</a>
+      <a href="https://t.me/tvoy_rot_naoborot_rb" target="_blank" rel="noopener">Менеджер</a>
+    </div>
+    <div class="footer-copy">© 2025 AdsPay. Реклама и ИИ-сервисы через Telegram.</div>
+  </div>
+</footer>
+
+<script>
+  function submitPageForm(event) {
+    event.preventDefault();
+    const btn = event.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = '⏳ Отправляем...';
+
+    const formData = new FormData(event.target);
+    const data = {
+      name: formData.get('name'),
+      telegram: formData.get('telegram'),
+      platforms: formData.getAll('platforms'),
+      budget: formData.get('budget'),
+      comment: formData.get('comment')
+    };
+
+    fetch('https://adspay-telegram.belada-export.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(function(response) { return response.json(); })
+    .then(function(result) {
+      if (result.success) {
+        document.getElementById('pageForm').style.display = 'none';
+        document.getElementById('formSuccess').style.display = 'block';
+      } else {
+        btn.disabled = false;
+        btn.textContent = '📩 Отправить заявку';
+        alert('Произошла ошибка. Пожалуйста, попробуйте ещё раз или напишите менеджеру.');
+      }
+    })
+    .catch(function() {
+      btn.disabled = false;
+      btn.textContent = '📩 Отправить заявку';
+      alert('Произошла ошибка сети. Напишите менеджеру напрямую: https://t.me/tvoy_rot_naoborot_rb');
+    });
+  }
+</script>
+</body>
+</html>

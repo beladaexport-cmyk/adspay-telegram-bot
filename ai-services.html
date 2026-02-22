@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AdsPay — ИИ-сервисы через Telegram</title>
+  <style>
+    :root {
+      --primary: #2196F3;
+      --primary-dark: #1976D2;
+      --primary-light: #4FC3F7;
+      --accent: #4CAF50;
+      --accent-gold: #FFD54F;
+      --accent-purple: #8B5CF6;
+      --bg-darker: #020a13;
+      --bg-dark: #0a1929;
+      --bg-card: #0d1b2a;
+      --bg-card-hover: #1a2332;
+      --border: #1e3a5f;
+      --border-light: #2e4a6f;
+      --text: #f9fafb;
+      --text-secondary: #d1d5db;
+      --text-muted: #9ca3af;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg-darker);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: rgba(10, 25, 41, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 24px;
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--primary-light);
+      text-decoration: none;
+    }
+
+    .logo span { color: var(--accent-gold); }
+
+    nav { display: flex; gap: 8px; align-items: center; }
+
+    nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    nav a:hover, nav a.active {
+      background: rgba(33, 150, 243, 0.15);
+      color: var(--primary-light);
+    }
+
+    nav a.nav-btn {
+      background: var(--primary);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    nav a.nav-btn:hover { background: var(--primary-dark); }
+
+    /* ===== HERO ===== */
+    .hero {
+      background: linear-gradient(135deg, var(--bg-darker) 0%, #0a1929 50%, #071520 100%);
+      padding: 100px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(139,92,246,0.15);
+      border: 1px solid rgba(139,92,246,0.3);
+      color: #a78bfa;
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+      letter-spacing: 0.5px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 .highlight { color: var(--primary-light); }
+    .hero h1 .highlight-purple { color: #a78bfa; }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 620px;
+      margin: 0 auto 36px;
+    }
+
+    .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* ===== BTN ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(33,150,243,0.4);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      box-shadow: 0 6px 24px rgba(33,150,243,0.5);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border-light);
+    }
+
+    .btn-outline:hover { background: var(--bg-card); border-color: var(--primary); }
+
+    .btn-accent {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(76,175,80,0.35);
+    }
+
+    .btn-accent:hover { background: #388E3C; box-shadow: 0 6px 24px rgba(76,175,80,0.45); }
+
+    .btn-purple {
+      background: var(--accent-purple);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(139,92,246,0.35);
+    }
+
+    .btn-purple:hover { background: #7c3aed; box-shadow: 0 6px 24px rgba(139,92,246,0.45); }
+
+    /* ===== SECTION ===== */
+    section { padding: 80px 24px; }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    .section-header { text-align: center; margin-bottom: 56px; }
+
+    .section-badge {
+      display: inline-block;
+      background: rgba(139,92,246,0.12);
+      border: 1px solid rgba(139,92,246,0.25);
+      color: #a78bfa;
+      padding: 4px 14px;
+      border-radius: 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .section-badge.blue {
+      background: rgba(33,150,243,0.12);
+      border-color: rgba(33,150,243,0.25);
+      color: var(--primary-light);
+    }
+
+    .section-header h2 {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .section-header p { color: var(--text-secondary); font-size: 1rem; max-width: 560px; margin: 0 auto; }
+
+    /* ===== AI SERVICE CARDS ===== */
+    .ai-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .ai-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    }
+
+    .ai-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-light);
+      transform: translateY(-4px);
+    }
+
+    .ai-card-header { display: flex; align-items: center; gap: 14px; }
+
+    .ai-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    .ai-icon.chatgpt  { background: rgba(16,163,127,0.15); }
+    .ai-icon.claude   { background: rgba(200,130,80,0.15); }
+    .ai-icon.midj     { background: rgba(139,92,246,0.15); }
+    .ai-icon.gemini   { background: rgba(66,133,244,0.15); }
+    .ai-icon.perplexity { background: rgba(33,150,243,0.15); }
+    .ai-icon.copilot  { background: rgba(255,213,79,0.15); }
+    .ai-icon.grok     { background: rgba(29,161,242,0.15); }
+    .ai-icon.other    { background: rgba(76,175,80,0.15); }
+
+    .ai-card-title h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
+
+    .ai-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .ai-badge.popular { background: rgba(76,175,80,0.2); color: #6fcf97; }
+    .ai-badge.creative { background: rgba(139,92,246,0.2); color: #a78bfa; }
+    .ai-badge.search  { background: rgba(33,150,243,0.2); color: var(--primary-light); }
+    .ai-badge.new     { background: rgba(255,213,79,0.2); color: var(--accent-gold); }
+
+    .ai-card p { color: var(--text-secondary); font-size: 0.88rem; flex-grow: 1; }
+
+    .ai-card-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+    .ai-price {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+    }
+
+    .ai-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      background: rgba(33,150,243,0.15);
+      color: var(--primary-light);
+      border: 1px solid rgba(33,150,243,0.25);
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .ai-link:hover { background: rgba(33,150,243,0.25); border-color: var(--primary); }
+
+    /* ===== FAQ ===== */
+    .faq-list { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+
+    .faq-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: inherit;
+      text-align: left;
+      padding: 18px 22px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      transition: background 0.2s;
+    }
+
+    .faq-question:hover { background: var(--bg-card-hover); }
+
+    .faq-question .faq-arrow {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      transition: transform 0.25s;
+      flex-shrink: 0;
+    }
+
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+
+    .faq-item.open .faq-answer { max-height: 300px; }
+
+    .faq-answer-inner {
+      padding: 0 22px 18px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+
+    /* ===== CTA ===== */
+    .cta-section {
+      background: linear-gradient(135deg, var(--bg-dark), var(--bg-darker));
+      border-top: 1px solid var(--border);
+    }
+
+    .cta-inner {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .cta-inner h2 { font-size: clamp(1.6rem, 3vw, 2rem); font-weight: 700; margin-bottom: 16px; }
+    .cta-inner p { color: var(--text-secondary); font-size: 1rem; margin-bottom: 32px; }
+
+    .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--bg-darker);
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .footer-logo { font-size: 1.2rem; font-weight: 700; color: var(--primary-light); text-decoration: none; }
+    .footer-logo span { color: var(--accent-gold); }
+
+    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--primary-light); }
+
+    .footer-copy {
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      width: 100%;
+      text-align: center;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 640px) {
+      header { padding: 0 16px; }
+      nav a { padding: 6px 10px; font-size: 0.82rem; }
+      .hero { padding: 70px 16px 60px; }
+      section { padding: 60px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">Ads<span>Pay</span></a>
+    <nav>
+      <a href="index.html">Главная</a>
+      <a href="ai-services.html" class="active">ИИ-сервисы</a>
+      <a href="guide.html">Руководство</a>
+      <a href="https://t.me/adspay_by_bot" class="nav-btn" target="_blank" rel="noopener">🤖 Запустить бота</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">🧠 Подписки на ИИ-сервисы</div>
+  <h1>
+    Подключите <span class="highlight-purple">ИИ-инструменты</span><br>
+    через <span class="highlight">Telegram-бота</span>
+  </h1>
+  <p>
+    Подпишитесь на ChatGPT Plus, Claude Pro, Midjourney и другие ИИ-сервисы
+    без иностранных карт — быстро и надёжно через @adspay_by_bot.
+  </p>
+  <div class="hero-actions">
+    <a href="https://t.me/adspay_by_bot" class="btn btn-purple" target="_blank" rel="noopener">
+      🤖 Открыть @adspay_by_bot
+    </a>
+    <a href="https://t.me/tvoy_rot_naoborot_rb" class="btn btn-outline" target="_blank" rel="noopener">
+      💬 Написать менеджеру
+    </a>
+  </div>
+</section>
+
+<!-- AI SERVICES -->
+<section style="background: var(--bg-dark);">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-badge">Каталог</div>
+      <h2>Доступные ИИ-сервисы</h2>
+      <p>Подключайте любые ИИ-инструменты без иностранных карт через нашего бота</p>
+    </div>
+    <div class="ai-grid">
+
+      <div class="ai-card">
+        <div class="ai-card-header">
+          <div class="ai-icon chatgpt">💬</div>
+          <div class="ai-card-title">
+            <h3>ChatGPT Plus</h3>
+            <span class="ai-badge popular">Популярный</span>
+          </div>
+        </div>
+        <p>GPT-4o, расширенная аналитика, создание изображений DALL·E, доступ к плагинам и GPT Store. Безлимитные сообщения.</p>
+        <div class="ai-card-footer">
+          <span class="ai-price">~$20/мес</span>
+          <a href="https://t.me/adspay_by_bot" class="ai-link" target="_blank" rel="noopener">Подключить →</a>
+        </div>
+      </div>
+
+      <div class="ai-card">
+        <div class="ai-card-header">
+          <div class="ai-icon claude">🧠</div>
+          <div class="ai-card-title">
+            <h3>Claude Pro</h3>
+            <span class="ai-badge popular">Популярный</span>
+          </div>
+        </div>
+        <p>Claude 3.5 Sonnet — лучший для анализа текстов, кода и документов. Большое контекстное окно, высокое качество ответов.</p>
+        <div class="ai-card-footer">
+          <span class="ai-price">~$20/мес</span>
+          <a href="https://t.me/adspay_by_bot" class="ai-link" target="_blank" rel="noopener">Подключить →</a>
+        </div>
+      </div>
+
+      <div class="ai-card">
+        <div class="ai-card-header">
+          <div class="ai-icon midj">🎨</div>
+          <div class="ai-card-title">
+            <h3>Midjourney</h3>
+            <span class="ai-badge creative">Творческий</span>
+          </div>
+        </div>
+        <p>Создание потрясающих изображений по текстовому описанию. Идеально для дизайна, маркетинга и творческих проектов.</p>
+        <div class="ai-card-footer">
+          <span class="ai-price">от $10/мес</span>
+          <a href="https://t.me/adspay_by_bot" class="ai-link" target="_blank" rel="noopener">Подключить →</a>
+        </div>
+      </div>
+
+      <div class="ai-card">
+        <div class="ai-card-header">
+          <div class="ai-icon gemini">✨</div>
+          <div class="ai-card-title">
+            <h3>Google Gemini Advanced</h3>
+            <span class="ai-badge new">Новинка</span>
+          </div>
+        </div>
+        <p>Gemini Ultra 1.0 — мощная мультимодальная модель Google. Интегрирована с Gmail, Docs, Drive и другими сервисами.</p>
+        <div class="ai-card-footer">
+          <span class="ai-price">~$20/мес</span>
+          <a href="https://t.me/adspay_by_bot" class="ai-link" target="_blank" rel="noopener">Подключить →</a>
+        </div>
+      </div>
+
+      <div class="ai-card">
+        <div class="ai-card-header">
+          <div class="ai-icon perplexity">🔎</div>
+          <div class="ai-card-title">
+            <h3>Perplexity Pro</h3>
+            <span class="ai-badge search">Поиск</span>
+          </div>
+        </div>
+        <p>ИИ-поисковик нового поколения. Ищет актуальную информацию в интернете и даёт чёткие ответы со ссылками на источники.</p>
+        <div class="ai-card-footer">
+          <span class="ai-price">~$20/мес</span>
+          <a href="https://t.me/adspay_by_bot" class="ai-link" target="_blank" rel="noopener">Подключить →</a>
+        </div>
+      </div>
+
+      <div class="ai-card">
+        <div class="ai-card-header">
+          <div class="ai-icon copilot">🖥️</div>
+          <div class="ai-card-title">
+            <h3>GitHub Copilot</h3>
+            <span class="ai-badge popular">Для разработчиков</span>
+          </div>
+        </div>
+        <p>ИИ-ассистент для программистов. Автодополнение кода, генерация функций, объяснение и рефакторинг прямо в редакторе.</p>
+        <div class="ai-card-footer">
+          <span class="ai-price">~$10/мес</span>
+          <a href="https://t.me/adspay_by_bot" class="ai-link" target="_blank" rel="noopener">Подключить →</a>
+        </div>
+      </div>
+
+      <div class="ai-card">
+        <div class="ai-card-header">
+          <div class="ai-icon grok">🐦</div>
+          <div class="ai-card-title">
+            <h3>Grok (xAI)</h3>
+            <span class="ai-badge new">Новинка</span>
+          </div>
+        </div>
+        <p>ИИ от Илона Маска. Доступ к актуальным новостям из X (Twitter), прямолинейные ответы без цензуры, генерация изображений.</p>
+        <div class="ai-card-footer">
+          <span class="ai-price">~$16/мес</span>
+          <a href="https://t.me/adspay_by_bot" class="ai-link" target="_blank" rel="noopener">Подключить →</a>
+        </div>
+      </div>
+
+      <div class="ai-card">
+        <div class="ai-card-header">
+          <div class="ai-icon other">💡</div>
+          <div class="ai-card-title">
+            <h3>Другие сервисы</h3>
+            <span class="ai-badge search">По запросу</span>
+          </div>
+        </div>
+        <p>Не нашли нужный ИИ-инструмент? Напишите менеджеру — поможем подключить любой сервис, который вам нужен.</p>
+        <div class="ai-card-footer">
+          <span class="ai-price">По договорённости</span>
+          <a href="https://t.me/tvoy_rot_naoborot_rb" class="ai-link" target="_blank" rel="noopener">Написать →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHY AI -->
+<section style="background: var(--bg-darker);">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-badge blue">Преимущества</div>
+      <h2>Почему стоит подключить ИИ-сервисы</h2>
+      <p>Автоматизируйте рутину, ускорьте создание контента и повысьте эффективность бизнеса</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+      <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px;">
+        <div style="font-size: 2rem; margin-bottom: 12px;">⚡</div>
+        <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 8px;">Экономия времени</h3>
+        <p style="color: var(--text-secondary); font-size: 0.88rem;">ИИ выполняет часы рутинной работы за минуты: написание текстов, анализ данных, ответы на запросы.</p>
+      </div>
+      <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px;">
+        <div style="font-size: 2rem; margin-bottom: 12px;">🎯</div>
+        <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 8px;">Точность и качество</h3>
+        <p style="color: var(--text-secondary); font-size: 0.88rem;">Создавайте рекламные тексты, посты и изображения профессионального уровня с помощью ИИ.</p>
+      </div>
+      <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px;">
+        <div style="font-size: 2rem; margin-bottom: 12px;">💰</div>
+        <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 8px;">Доступные цены</h3>
+        <p style="color: var(--text-secondary); font-size: 0.88rem;">Подключайте ИИ-подписки без иностранных карт — по выгодному курсу через наш сервис.</p>
+      </div>
+      <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px;">
+        <div style="font-size: 2rem; margin-bottom: 12px;">🔒</div>
+        <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 8px;">Безопасно и надёжно</h3>
+        <p style="color: var(--text-secondary); font-size: 0.88rem;">Проверенный сервис, сотни клиентов, прозрачные условия. Поддержка через Telegram 24/7.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="background: var(--bg-dark);">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-badge">FAQ</div>
+      <h2>Часто задаваемые вопросы</h2>
+      <p>Ответы на самые популярные вопросы про подключение ИИ-сервисов</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Как купить подписку без иностранной карты?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            Напишите в бот @adspay_by_bot или менеджеру. Вам пришлют реквизиты для оплаты удобным для вас способом. После оплаты подписка активируется в течение нескольких часов.
+          </div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Это официальные подписки?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            Да, мы активируем официальные подписки на ваш аккаунт. Никаких шаринга, только ваш личный аккаунт с полным доступом ко всем функциям сервиса.
+          </div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Сколько времени занимает активация?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            После подтверждения оплаты подписка активируется в течение 1–4 часов. В большинстве случаев быстрее. Вы получите уведомление в Telegram.
+          </div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Можно ли продлить подписку?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            Конечно. За несколько дней до истечения срока напишите нам — и мы продлим подписку без лишних хлопот. Постоянным клиентам — специальные условия.
+          </div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Нужен ли аккаунт на сервисе?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">
+            Для большинства сервисов аккаунт нужен. Если у вас его нет — мы поможем зарегистрироваться. Просто напишите менеджеру по адресу <a href="https://t.me/tvoy_rot_naoborot_rb" target="_blank" rel="noopener" style="color: var(--primary-light);">@tvoy_rot_naoborot_rb</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-inner">
+      <h2>🧠 Готовы подключить ИИ?</h2>
+      <p>
+        Напишите в бота <strong>@adspay_by_bot</strong> или менеджеру —
+        и мы подберём и подключим нужные ИИ-инструменты для вашего бизнеса.
+      </p>
+      <div class="cta-actions">
+        <a href="https://t.me/adspay_by_bot" class="btn btn-primary" target="_blank" rel="noopener">
+          🤖 Открыть бота
+        </a>
+        <a href="https://t.me/tvoy_rot_naoborot_rb" class="btn btn-accent" target="_blank" rel="noopener">
+          💬 Написать менеджеру
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="footer-logo">Ads<span>Pay</span></a>
+    <div class="footer-links">
+      <a href="index.html">Главная</a>
+      <a href="ai-services.html">ИИ-сервисы</a>
+      <a href="guide.html">Руководство</a>
+      <a href="https://t.me/adspay_by_bot" target="_blank" rel="noopener">Бот @adspay_by_bot</a>
+      <a href="https://t.me/tvoy_rot_naoborot_rb" target="_blank" rel="noopener">Менеджер</a>
+    </div>
+    <div class="footer-copy">© 2025 AdsPay. Реклама и ИИ-сервисы через Telegram.</div>
+  </div>
+</footer>
+
+<script>
+  function toggleFaq(btn) {
+    var item = btn.parentElement;
+    item.classList.toggle('open');
+  }
+</script>
+</body>
+</html>
