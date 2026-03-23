@@ -1,0 +1,10 @@
+name = "adspay-telegram"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# Переменные окружения (не включайте токен в файл!)
+# Добавьте BOT_TOKEN через Dashboard или командой:
+#   wrangler secret put BOT_TOKEN
+
+[vars]
+MANAGER_CHAT_ID = "390197983"
